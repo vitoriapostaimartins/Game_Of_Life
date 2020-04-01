@@ -23,13 +23,6 @@ public class Herbivore extends Animal implements Movable {
         moved = false;
     }
 
-    void die() {
-        System.out.println("called die");
-        cell.updateLifeform(null);
-        cell.getBoard().getLifeforms().remove(this);
-        cell = null;
-    }
-
     @Override
     boolean act() {
         if (count == 5) {
@@ -55,18 +48,6 @@ public class Herbivore extends Animal implements Movable {
         if (destiny != null) {
             moveTo(destiny);
         }
-    }
-
-    public ArrayList<Cell> getEatable() {
-        ArrayList<Cell> occNeighbours = Cell.getOccupied(cell.getNeighbours());
-        ArrayList<Cell> eatable = new ArrayList<>();
-        Collections.shuffle(occNeighbours);
-        for(Cell b : occNeighbours){
-            if(b.getLifeform().isFood()){
-                eatable.add(b);
-            }
-        }
-        return eatable;
     }
 
     public Cell getMovable(){

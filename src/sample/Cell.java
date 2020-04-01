@@ -73,9 +73,8 @@ public class Cell {
         Cell up = getBlock(row - 1, col);
         Cell upLeft = getBlock(row - 1, col - 1);
         Cell upRight = getBlock(row - 1, col + 1);
-        ArrayList<Cell> neighbours = new ArrayList<>();
 
-        neighbours.addAll(Arrays.asList(down, left, right,
+        ArrayList<Cell> neighbours = new ArrayList<>(Arrays.asList(down, left, right,
                 downLeft, downRight, up, upLeft, upRight));
         neighbours.removeAll(Collections.singleton(null));
 
@@ -84,31 +83,6 @@ public class Cell {
         return neighbours;
     }
 
-    public boolean isEmpty(){
-        return getLifeform() == null;
-    }
-
-    public static ArrayList<Cell> getEmpty(ArrayList<Cell> cells){
-        ArrayList<Cell> empty = new ArrayList<>();
-        for(Cell b: cells){
-                if(b.isEmpty());
-                    empty.add(b);
-
-
-        }
-        return empty;
-    }
-
-    public static ArrayList<Cell> getPlants(ArrayList<Cell> cells){
-        ArrayList<Cell> plants = new ArrayList<>();
-        for(Cell b : cells){
-            if(b.getLifeform() != null && b.getLifeform().isFood()){
-                    plants.add(b);
-                }
-
-        }
-        return plants;
-    }
 
     public static ArrayList<Cell> getOccupied(ArrayList<Cell> cells){
         ArrayList<Cell> occ = new ArrayList<>();
@@ -180,14 +154,6 @@ public class Cell {
             }}catch (Exception e){return null;}
         }
         return null;
-    }
-
-    public int getRow(){
-        return row;
-    }
-
-    public int getCol(){
-        return col;
     }
 
     public void setPos(int r, int c){

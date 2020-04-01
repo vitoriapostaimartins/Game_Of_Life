@@ -8,7 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class World {
-    public List<Lifeform> lifeforms = new ArrayList<>();
+    public static List<Lifeform> lifeforms = new ArrayList<>();
+    public static List<Lifeform> newLifeforms = new ArrayList<>();
     private Cell[][] cells;
     private GridPane worldUI;
     private int rows;
@@ -24,9 +25,7 @@ public class World {
 
     }
 
-    public List<Lifeform> getLifeforms(){
-        return lifeforms;
-    }
+    public static void addLifeform(Lifeform lf){newLifeforms.add(lf);}
 
     public Cell getBlock(int row, int col){
         try{
@@ -60,29 +59,29 @@ public class World {
                 }
                 b.setPos(i, j);
                 cells[i][j] = b;
-                worldUI.add(b.getBlockUI(), j, i);
+                worldUI.add(b.getBlockUI(), i, j);
             }
         }
     }
+
+
 
     public class ClickHandler implements EventHandler<MouseEvent>{
         @Override
         public void handle(MouseEvent mouseEvent) {
             for(Lifeform lf : lifeforms){
-                if(lf.act()){
-                    lf.reset();
-                } else{
+                if(!lf.act()){
                     if(!lf.isDead()){
                         lf.setDead(true);
                         lf.cell.updateLifeform(null);
                         lf.cell = null;
                     }
-
-
-
-//                    lifeforms.remove(lf);
                 }
             }
+            for(Lifeform lf : lifeforms){
+                lf.reset();
+            }
+            lifeforms.addAll(newLifeforms);
         }
 
     }
