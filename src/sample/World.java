@@ -1,36 +1,38 @@
 package sample;
 
-import javafx.event.EventHandler;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class World {
-    public static List<Lifeform> lifeforms = new ArrayList<>();
-    public static List<Lifeform> newLifeforms = new ArrayList<>();
+    private static ArrayList<Lifeform> lifeforms = new ArrayList<>();
+    private static ArrayList<Lifeform> newLifeforms = new ArrayList<>();
+    private static ArrayList<Lifeform> lifeformsToRemove = new ArrayList<>();
     private Cell[][] cells;
     private GridPane worldUI;
     private int rows;
     private int cols;
 
-    public World(int r, int c){
+    public World(int r, int c) {
         rows = r;
         cols = c;
         cells = new Cell[rows][cols];
         createBoardUI();
-        ClickHandler clickHandler = new ClickHandler();
-        worldUI.setOnMouseClicked(clickHandler);
 
     }
 
-    public static void addLifeform(Lifeform lf){newLifeforms.add(lf);}
+    public static void addLifeform(Lifeform lf) {
+        newLifeforms.add(lf);
+    }
 
-    public Cell getBlock(int row, int col){
-        try{
+    public void removeLifeform(Lifeform lf) {
+        lifeformsToRemove.add(lf);
+    }
+
+    public Cell getCell(int row, int col) {
+        try {
             return cells[row][col];
-        }catch (ArrayIndexOutOfBoundsException e){
+        } catch (ArrayIndexOutOfBoundsException e) {
             return null;
         }
     }
@@ -39,52 +41,43 @@ public class World {
         return worldUI;
     }
 
-    public void createBoardUI(){
+    private void createBoardUI() {
         worldUI = new GridPane();
-        for(int i = 0; i < rows; i++){
-            for(int j = 0; j < cols; j++){
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
                 Cell b = new Cell(null, this);
                 int type = RandomGenerator.nextNumber(100);
-                if(type >= 65 && type < 85){
+                if (type >= 65 && type < 85) {
                     Lifeform lf2 = new Plant();
                     b = new Cell(lf2, this);
                     lifeforms.add(lf2);
-                } else if(type >= 85){
+                } else if (type >= 85) {
                     Lifeform lf = new Herbivore();
                     b = new Cell(lf, this);
                     lifeforms.add(lf);
                 }
-                if(b.getLifeform() != null){
+                if (b.getLifeform() != null) {
                     b.getLifeform().setCell(b);
                 }
                 b.setPos(i, j);
                 cells[i][j] = b;
-                worldUI.add(b.getBlockUI(), i, j);
+                worldUI.add(b.getCellUI(), i, j);
             }
         }
     }
 
-
-
-    public class ClickHandler implements EventHandler<MouseEvent>{
-        @Override
-        public void handle(MouseEvent mouseEvent) {
-            for(Lifeform lf : lifeforms){
-                if(!lf.act()){
-                    if(!lf.isDead()){
-                        lf.setDead(true);
-                        lf.cell.updateLifeform(null);
-                        lf.cell = null;
-                    }
-                }
+    public void updateWorld() {
+        for (Lifeform lf : lifeforms) {
+            if (!lf.act()) {
+                lf.die();
             }
-            for(Lifeform lf : lifeforms){
-                lf.reset();
-            }
-            lifeforms.addAll(newLifeforms);
         }
-
     }
 
+    public void endTurn() {
+        lifeforms.forEach(Lifeform::reset);
+        lifeforms.addAll(newLifeforms);
+        lifeforms.removeAll(lifeformsToRemove);
+    }
 
 }

@@ -2,14 +2,12 @@ package sample;
 
 import javafx.scene.paint.Color;
 
-import java.util.*;
+import java.util.ArrayList;
 
 public class Herbivore extends Animal implements Movable {
-    boolean moved = false;
-
     public Herbivore() {
-        color = Color.YELLOW;
-        count = 0;
+        setColor(Color.YELLOW);
+        setHunger(0);
 
     }
 
@@ -19,68 +17,40 @@ public class Herbivore extends Animal implements Movable {
     }
 
     @Override
-    void reset() {
-        moved = false;
-    }
-
-    @Override
     boolean act() {
-        if (count == 5) {
+        if (getHunger() == 5) {
             return false;
         } else {
-            if (!moved) {
+            if (!hasActed()) {
                 move();
-                moved = true;
+                setActed(true);
             }
             return true;
         }
     }
 
     @Override
-    boolean isFood() {
-        return false;
-    }
-
-    @Override
-    public void move() {
-//        System.out.println("herbivore acted");
-        Cell destiny = lookAround();
-        if (destiny != null) {
-            moveTo(destiny);
-        }
-    }
-
-    public Cell getMovable(){
-        ArrayList<Cell> neighbours = cell.getNeighbours();
-        List<Cell> cells = new ArrayList<>();
-        Collections.shuffle(cells);
-        for(Cell cell : neighbours){
-            if(cell.getLifeform() == null){
-                count ++;
-                return cell;
-            } else if(cell.getLifeform().isFood()){
-                count = 0;
+    public Cell chooseDestiny() {
+        ArrayList<Cell> neighbours = getCell().getNeighbours();
+        for (Cell cell : neighbours) {
+            if (eat(cell.getLifeform())) {
                 return cell;
             }
         }
-        count++;
+        incrementHunger();
         return null;
     }
 
-    public void moveTo(Cell destiny) {
-
-        destiny.updateLifeform(this);
-        cell.updateLifeform(null);
-        cell = destiny;
-    }
-
-    public Cell lookAround() {
-        try {
-            return getMovable();
-        } catch (Exception e) {
-            return null;
+    @Override
+    boolean eat(Lifeform lf) {
+        if (lf == null) {
+            incrementHunger();
+            return true;
+        } else if (lf instanceof HerbivoreEdible) {
+            setHunger(0);
+            return true;
         }
-//        return null
+        return false;
     }
 
 }

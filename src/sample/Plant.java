@@ -2,32 +2,20 @@ package sample;
 
 import javafx.scene.paint.Color;
 
-import java.util.*;
+import java.util.ArrayList;
 
-public class Plant extends Lifeform implements Edible {
-    boolean moved = false;
+public class Plant extends Lifeform implements HerbivoreEdible {
+
     public Plant() {
-        color = Color.GREEN;
-    }
-
-    @Override
-    void reset() {
-        moved = false;
-        if(isNew){
-            isNew = false;
-            cell.setColor(Color.GREEN);
-            System.out.println("in reset");
-        }
-
+        setColor(Color.GREEN);
     }
 
     @Override
     boolean act() {
-        if(!isNew()){
-        seed();
+        if (!isNew()) {
+            seed();
         }
-        moved = true;
-
+        setActed(true);
         return true;
     }
 
@@ -36,37 +24,32 @@ public class Plant extends Lifeform implements Edible {
         return "Plant";
     }
 
-    @Override
-    boolean isFood() {
-        return true;
-    }
-
-    public void seed() {
+    private void seed() {
         ArrayList<Cell> empty = new ArrayList<>();
         int emptyCount = 0;
-        ArrayList<Cell> neighbours = cell.getNeighbours();
-        for(Cell c : neighbours){
-            if(c.getLifeform() instanceof Plant){
+        ArrayList<Cell> neighbours = getCell().getNeighbours();
+        for (Cell c : neighbours) {
+            if (c.getLifeform() instanceof Plant) {
                 emptyCount++;
                 continue;
-            } else if(c.getLifeform() instanceof Animal){
+            } else if (c.getLifeform() instanceof Animal) {
                 continue;
             }
             empty.add(c);
         }
-        if(emptyCount == 4 && empty.size() >=3){
-            for(Cell c:empty){
+        if (emptyCount == 4 && empty.size() >= 3) {
+            for (Cell c : empty) {
                 addNewPlant(c);
+                return;
             }
         }
     }
 
-    private void addNewPlant(Cell c){
+    private void addNewPlant(Cell c) {
         Plant pl = new Plant();
-        pl.isNew = true;
+        pl.setIsNew(true);
         c.updateLifeform(pl);
         pl.setCell(c);
         World.addLifeform(pl);
     }
-
 }
