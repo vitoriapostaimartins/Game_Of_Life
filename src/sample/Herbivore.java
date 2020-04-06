@@ -5,6 +5,7 @@ import javafx.scene.paint.Color;
 import java.util.ArrayList;
 
 public class Herbivore extends Animal implements Movable {
+    public static final int LIFE = 5;
     public Herbivore() {
         setColor(Color.YELLOW);
         setHunger(0);
@@ -18,7 +19,7 @@ public class Herbivore extends Animal implements Movable {
 
     @Override
     boolean act() {
-        if (getHunger() == 5) {
+        if (getHunger() == LIFE) {
             return false;
         } else {
             if (!hasActed()) {
