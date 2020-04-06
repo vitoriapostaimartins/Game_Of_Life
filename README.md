@@ -36,3 +36,7 @@ in order to be classified as one, and would be able to use the available methods
 * A movable plant could exist. In that case, the Movable interface would tag the new entity and provide method headers for its possible actions. 
 * There could be 3 boards, like the 3D Chess game. In this case, each board would have an ID and would be added to the scene, like it was done in the previous assignment.
 * Furthermore, numbers could change, so they were made a constant and it would be very easy to change it in one place.
+## Note
+* One of the requirements for a plant to be able to seed was modified in this 
+program. The original requirement was that a plant had to be around
+exactly 4 other plants, which was changed to 3 or more.

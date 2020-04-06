@@ -37,7 +37,7 @@ public class Plant extends Lifeform implements HerbivoreEdible {
             }
             empty.add(c);
         }
-        if (emptyCount == 4 && empty.size() >= 3) {
+        if (emptyCount >= 3 && empty.size() >= 3) {
             for (Cell c : empty) {
                 addNewPlant(c);
                 return;
