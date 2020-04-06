@@ -34,3 +34,5 @@ and attributes that identify a lifeform. The virus would be able to override met
 * A new type of animal could exist, such as a carnivore. In this case, the carnivore would have to extend the abstract class Animal, 
 in order to be classified as one, and would be able to use the available methods, as well as override them.
 * A movable plant could exist. In that case, the Movable interface would tag the new entity and provide method headers for its possible actions. 
+* There could be 3 boards, like the 3D Chess game. In this case, each board would have an ID and would be added to the scene, like it was done in the previous assignment.
+* Furthermore, numbers could change, so they were made a constant and it would be very easy to change it in one place.
